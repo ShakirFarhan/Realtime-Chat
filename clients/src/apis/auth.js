@@ -1,4 +1,9 @@
 import axios from "axios";
+const API = (token) =>
+  axios.create({
+    baseURL: "http://localhost:8000",
+    headers: { Authorization: token },
+  });
 const url = "http://localhost:8000";
 export const loginUser = async (body) => {
   try {
@@ -25,11 +30,20 @@ export const validUser = async () => {
   try {
     const token = localStorage.getItem("userToken");
 
-    const { data } = await axios.get(`${url}/auth/valid`, {
+    const { data } = await API(token).get(`/auth/valid`, {
       headers: { Authorization: token },
     });
     return data;
   } catch (error) {
     console.log("error in valid user api");
+  }
+};
+export const searchUsers = async (id) => {
+  try {
+    const token = localStorage.getItem("userToken");
+
+    return await API(token).get(`${url}/api/user?search=${id}`);
+  } catch (error) {
+    console.log("error in search users api");
   }
 };

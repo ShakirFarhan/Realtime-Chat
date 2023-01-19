@@ -6,17 +6,19 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import userRoutes from "./routes/user.js";
 import chatRoutes from "./routes/chat.js";
-// dotenv.config({ path: "./.env" });
+import messageRoutes from "./routes/message.js";
 const app = express();
 const corsConfig = {
   origin: true,
   credentials: true,
 };
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors(corsConfig));
 app.use("/", userRoutes);
-app.use("/api/chat/", chatRoutes);
+app.use("/api/chat", chatRoutes);
+app.use("/api/message", messageRoutes);
 mongoose.set("strictQuery", false);
 mongoDBConnect();
 app.listen(process.env.PORT, () => {

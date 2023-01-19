@@ -14,6 +14,7 @@ export const register = async (req, res) => {
     res.json({ message: "success", token: token });
   } catch (error) {
     console.log("Error in register " + error);
+    res.status(500);
   }
 };
 export const login = async (req, res) => {
@@ -34,7 +35,7 @@ export const login = async (req, res) => {
       res.status(200).json({ token: token, status: 200 });
     }
   } catch (error) {
-    res.json({ error: error });
+    res.status(500);
     console.log(error);
   }
 };
@@ -49,6 +50,7 @@ export const validUser = async (req, res) => {
       token: req.token,
     });
   } catch (error) {
+    res.status(500);
     console.log(error);
   }
 };
@@ -85,6 +87,7 @@ export const googleAuth = async (req, res) => {
       res.json({ message: "User registered Successfully", token: tokenId });
     }
   } catch (error) {
+    res.status(500);
     console.log("error in googleAuth backend" + error);
   }
 };
@@ -93,19 +96,16 @@ export const logout = (req, res) => {
   req.rootUser.tokens = req.rootUser.tokens.filter((e) => e.token != req.token);
 };
 export const searchUsers = async (req, res) => {
-  const data = req.query.search
+  // const { search } = req.query;
+  const search = req.query.search
     ? {
         $or: [
-          {
-            name: { $regex: req.query.search, $options: "i" },
-            email: { $regex: req.query.search, $options: "i" },
-          },
+          { name: { $regex: req.query.search, $options: "i" } },
+          { email: { $regex: req.query.search, $options: "i" } },
         ],
       }
     : {};
-  const users = await user
-    .find(data)
-    // .find({ _id: { $ne: req.rootUserId } })
-    .find({ _id: { $ne: "63c1357305966cdad27c7e01" } });
+
+  const users = await user.find(search).find({ _id: { $ne: req.rootUserId } });
   res.send(users);
 };

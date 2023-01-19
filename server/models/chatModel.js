@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 const chatSchema = mongoose.Schema(
   {
+    photo: {
+      type: String,
+      default:
+        "https://assets.materialup.com/uploads/3b63d5b6-7a26-459b-9e7d-5202bf0932db/preview.jpg",
+    },
     chatName: {
       type: String,
     },
@@ -15,7 +20,7 @@ const chatSchema = mongoose.Schema(
       },
     ],
     latestMessage: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Message",
     },
     groupAdmin: {

@@ -14,5 +14,5 @@ router.post("/auth/login", login);
 router.get("/auth/valid", Auth, validUser);
 router.get("/auth/logout", Auth, logout);
 router.post("/api/google", googleAuth);
-router.get("/api/user?", searchUsers);
+router.get("/api/user?", Auth, searchUsers);
 export default router;

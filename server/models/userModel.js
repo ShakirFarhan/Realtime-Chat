@@ -24,11 +24,10 @@ const userSchema = mongoose.Schema(
       default:
         "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
     },
-    tokens: [
+    contacts: [
       {
-        token: {
-          type: String,
-        },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
       },
     ],
   },
@@ -46,10 +45,12 @@ userSchema.methods.generateAuthToken = async function () {
   try {
     let token = jwt.sign(
       { id: this._id, email: this.email },
-      process.env.SECRET
+      process.env.SECRET,
+      {
+        expiresIn: "24h",
+      }
     );
-    this.tokens = this.tokens.concat({ token: token });
-    await this.save();
+
     return token;
   } catch (error) {
     console.log("error while generating token");
