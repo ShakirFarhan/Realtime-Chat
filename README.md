@@ -6,9 +6,8 @@ This is a real-time chat website that allows users to connect with each other an
 
 - Real-time chat: users can send and receive messages in real-time
 - Responsive design: the website is optimized for different screen sizes and devices
-- User authentication: users can sign up, log in, and log out
-- Room creation: users can create chat rooms and invite others to join
-- User status: users can see the online/offline status of other users
+- User authentication: users can sign up, log in, and log out using JWT and Google Auth
+- Group creation: users can create chat rooms and invite others to join
 - Emojis: users can send and receive emojis in messages
 
 ## Installation and Usage
