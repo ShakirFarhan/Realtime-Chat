@@ -30,7 +30,7 @@ To use this project, follow these steps:
 
 ## Contributing
 
-Contributions to this project are welcome!If you find a bug or want to add a feature, please submit an issue or a pull request. To contribute, follow these steps:
+Contributions to this project are welcome! If you find a bug or want to add a feature, please submit an issue or a pull request. To contribute, follow these steps:
 
 1. Fork the repository
 2. Create a new branch for your feature: `git checkout -b my-new-feature`
