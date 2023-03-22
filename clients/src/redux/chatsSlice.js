@@ -1,24 +1,29 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { fetchAllChats } from "../apis/chat";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
+import { fetchAllChats } from '../apis/chat';
 const initialState = {
   chats: [],
-  activeChat: "",
+  activeChat: '',
   isLoading: false,
+  notifications: [],
 };
-export const fetchChats = createAsyncThunk("redux/chats", async () => {
+export const fetchChats = createAsyncThunk('redux/chats', async () => {
   try {
     const data = await fetchAllChats();
     return data;
   } catch (error) {
-    console.log(error);
+    toast.error('Something Went Wrong!Try Again');
   }
 });
 const chatsSlice = createSlice({
-  name: "chats",
+  name: 'chats',
   initialState,
   reducers: {
     setActiveChat: (state, { payload }) => {
       state.activeChat = payload;
+    },
+    setNotifications: (state, { payload }) => {
+      state.notifications = payload;
     },
   },
   extraReducers: {
@@ -34,5 +39,5 @@ const chatsSlice = createSlice({
     },
   },
 });
-export const { setActiveChat } = chatsSlice.actions;
+export const { setActiveChat, setNotifications } = chatsSlice.actions;
 export default chatsSlice.reducer;

@@ -20,6 +20,7 @@
     "jsonwebtoken": "^9.0.0",
     "jwt-check-expiration": "^1.0.5",
     "jwt-decode": "^3.1.2",
-    "mongoose": "^6.8.2"
+    "mongoose": "^6.8.2",
+    "socket.io": "^4.6.1"
   }
 }

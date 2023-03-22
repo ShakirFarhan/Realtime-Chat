@@ -6,6 +6,8 @@ import { useEffect } from 'react'
 import { googleAuth, registerUser } from '../apis/auth'
 import { useState } from 'react'
 import { BsEmojiLaughing, BsEmojiExpressionless } from "react-icons/bs"
+import { toast } from 'react-toastify';
+
 const defaultData = {
   firstname: "",
   lastname: "",
@@ -23,12 +25,26 @@ function Regsiter() {
   const handleOnSubmit = async (e) => {
     e.preventDefault()
     setIsLoading(true)
-    const { data } = await registerUser(formData)
-    if (data?.token) {
-      localStorage.setItem("userToken", data.token)
-      setIsLoading(false)
-      pageRoute("/")
+    if (formData.email.includes("@") && formData.password.length > 6) {
+      const { data } = await registerUser(formData)
+      if (data?.token) {
+        localStorage.setItem("userToken", data.token)
+        toast.success("Succesfully Registered😍")
+        setIsLoading(false)
+        pageRoute("/")
+
+      }
+      else {
+        setIsLoading(false)
+        toast.error("Invalid Credentials!")
+      }
     }
+    else {
+      setIsLoading(false)
+      toast.warning("Provide valid Credentials!")
+      setFormData({ ...formData, password: "" })
+    }
+
   }
 
   const googleSuccess = async (res) => {
@@ -41,7 +57,7 @@ function Regsiter() {
     }
   }
   const googleFailure = (error) => {
-    console.log(error)
+    toast.error("Something Went Wrong.Try Agian!")
   }
 
   useEffect(() => {
@@ -63,14 +79,16 @@ function Regsiter() {
         </div>
         <form className='flex flex-col gap-y-3 mt-[12%]' onSubmit={handleOnSubmit}>
           <div className='flex gap-x-2 w-[100%]'>
-            <input onChange={handleOnChange} className='bg-[#222222] h-[50px] pl-3 text-[#ffff] w-[49%] sm:w-[47%]' type="text" name="firstname" placeholder='First Name' required />
-            <input onChange={handleOnChange} className='bg-[#222222] h-[50px] pl-3 text-[#ffff] w-[49%] sm:w-[47%]' type="text" name="lastname" placeholder='Last Name' required />
+            <input onChange={handleOnChange} className='bg-[#222222] h-[50px] pl-3 text-[#ffff] w-[49%] sm:w-[47%]' type="text" name="firstname" placeholder='First Name' value={formData.firstname} required />
+            <input onChange={handleOnChange} className='bg-[#222222] h-[50px] pl-3 text-[#ffff] w-[49%] sm:w-[47%]' type="text" name="lastname" placeholder='Last Name' value={formData.lastname} required />
           </div>
           <div>
-            <input onChange={handleOnChange} className='bg-[#222222] h-[50px] pl-3 text-[#ffff] w-[100%] sm:w-[96.3%]' type="email" name="email" placeholder="Email" required />
+            <input onChange={handleOnChange} className='bg-[#222222] h-[50px] pl-3 text-[#ffff] w-[100%] sm:w-[96.3%]' type="email" name="email" placeholder="Email" value={formData.email} required />
           </div>
-          <div className='relative'>
-            <input onChange={handleOnChange} className='bg-[#222222] h-[50px] pl-3 text-[#ffff] w-[100%] sm:w-[96.3%]' type={showPass ? "text" : "password"} name="password" placeholder="Password" required />
+          <div className='relative flex flex-col gap-y-3'>
+            <input onChange={handleOnChange} className='bg-[#222222] h-[50px] pl-3 text-[#ffff] w-[100%] sm:w-[96.3%]' type={showPass ? "text" : "password"} name="password" placeholder="Password" value={formData.password} required />
+
+
             {/* <button onCli type="button">
               <BsEmojiExpressionless className='text-[#fff] absolute top-3 right-6 w-[30px] h-[25px]' />
             </button> */}

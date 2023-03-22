@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { BsPlusLg } from "react-icons/bs"
-import Loading from './Loading';
-import { Modal, Box, Typography } from "@mui/material"
+import { Modal, Box } from "@mui/material"
 import { searchUsers } from '../apis/auth';
 import { RxCross2 } from "react-icons/rx"
 import { useEffect } from 'react';
 import { createGroup } from '../apis/chat';
 import { fetchChats } from '../redux/chatsSlice';
 import { useDispatch } from 'react-redux';
+import Search from './group/Search';
 
 const style = {
   position: 'absolute',
@@ -30,7 +30,11 @@ function Group() {
   const [isLoading, setIsLoading] = useState(false)
   const [selectedUser, setSelectedUsers] = useState([])
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false)
+    setSearch("")
+    setSelectedUsers([])
+  }
   const handleFormSearch = async (e) => {
     setSearch(e.target.value)
   }
@@ -40,31 +44,38 @@ function Group() {
     }
     setSelectedUsers([...selectedUser, e])
   }
-  const searchChange = async () => {
-    setIsLoading(true)
-    const { data } = await searchUsers(search)
-    setSearchResults(data)
-    setIsLoading(false)
-  }
+
   const deleteSelected = (ele) => {
-    setSelectedUsers(selectedUser.filter((e) => e._id != ele._id))
+    setSelectedUsers(selectedUser.filter((e) => e._id !== ele._id))
   }
   const handleSubmit = async () => {
-    const res = await createGroup({
-      chatName,
-      users: JSON.stringify(selectedUser.map((e) => e._id))
-    })
-    dispatch(fetchChats())
+    if (selectedUser.length >= 2) {
+
+      await createGroup({
+        chatName,
+        users: JSON.stringify(selectedUser.map((e) => e._id))
+      })
+      dispatch(fetchChats())
+      handleClose()
+    }
   }
   useEffect(() => {
+    const searchChange = async () => {
+      setIsLoading(true)
+      const { data } = await searchUsers(search)
+      setSearchResults(data)
+      setIsLoading(false)
+    }
     searchChange()
   }, [search])
+  useEffect(() => {
+  }, [])
   return (
     <>
       <button className='mt-1 transition duration-150 ease-in-out' onClick={handleOpen}>
 
         <div className='flex justify-start border-r-2'>
-          <button className='text-[11px] font-normal tracking-wide flex items-center gap-x-1 bg-[#f0f2f5] text-[#111b21] py-1 -mb-7 mt-2  px-2'>New Group <BsPlusLg /></button>
+          <button className='text-[11px] font-normal tracking-wide flex items-center gap-x-1 bg-[#f6f6f6] text-[#1f2228] py-1 -mb-7 mt-2  px-2'>New Group <BsPlusLg /></button>
         </div>
       </button>
       <Modal
@@ -85,7 +96,7 @@ function Group() {
               {
                 selectedUser?.map((e) => {
                   return (
-                    <button onClick={() => deleteSelected(e)} className='flex items-center gap-x-1 bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400'>
+                    <button key={e} onClick={() => deleteSelected(e)} className='flex items-center gap-x-1 bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400'>
                       <span >{e.name}</span>
                       <RxCross2 />
                     </button>
@@ -93,30 +104,10 @@ function Group() {
                 })
               }
             </div>
-            <div style={{ display: search ? "" : "none" }} className='text-[#00000]  z-10 w-[100%] bg-[#fff] flex flex-col gap-y-3 pt-3 px-2'>
 
-              {
-                isLoading ? <div>Loading</div> : (
 
-                  searchResults?.map((e) => {
-                    return (
-                      <div key={e._id} className='flex items-center justify-between'>
-                        <div className='flex items-center gap-x-2'>
+            <Search isLoading={isLoading} handleClick={handleClick} search={search} searchResults={searchResults} />
 
-                          <img className='w-[42px] h-[42px] rounded-[25px]' src={!e.profilePic ? "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg" : e.profilePic} alt="" />
-                          <div className='flex flex-col gap-y-[1px]'>
-                            <h5 className='text-[15px] text-[#111b21] tracking-wide font-medium'>{e.name}</h5>
-                            <h5 className='text-[12px] text-[#68737c] tracking-wide font-normal'>{e.email}</h5>
-                          </div>
-                        </div>
-                        <button onClick={() => handleClick(e)} className='bg-[#0086ea] px-3 py-2 text-[10.6px] tracking-wide text-[#fff]'>Add</button>
-                      </div>
-                    )
-                  })
-                )
-
-              }
-            </div>
             <div className='flex justify-end mt-3'>
               <button onClick={handleSubmit} className='bg-[#0086ea] text-[#fff] text-[15px] font-medium px-2 py-1 tracking-wide' type='submit'>Create</button>
             </div>

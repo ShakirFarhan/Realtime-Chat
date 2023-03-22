@@ -1,24 +1,24 @@
-import { rootShouldForwardProp } from "@mui/material/styles/styled";
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { searchUsers } from "../apis/auth";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
+import { searchUsers } from '../apis/auth';
 const initialState = {
   searchResults: [],
   isLoading: false,
   isError: false,
 };
 export const searchUserThunk = createAsyncThunk(
-  "redux/searchUser",
+  'redux/searchUser',
   async (search) => {
     try {
       const { data } = await searchUsers(search);
       return data;
     } catch (error) {
-      console.log(error);
+      toast.error('Something Went Wrong.Try Again!');
     }
   }
 );
 const searchSlice = createSlice({
-  name: "search",
+  name: 'search',
   initialState,
   reducers: {},
   extraReducers: {

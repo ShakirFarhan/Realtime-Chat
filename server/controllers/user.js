@@ -109,6 +109,15 @@ export const searchUsers = async (req, res) => {
   const users = await user.find(search).find({ _id: { $ne: req.rootUserId } });
   res.send(users);
 };
+export const getUserById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const selectedUser = await user.findOne({ _id: id }).select('-password');
+    res.status(200).json(selectedUser);
+  } catch (error) {
+    res.status(500);
+  }
+};
 export const updateInfo = async (req, res) => {
   const { id } = req.params;
   const { bio, name } = req.body;
