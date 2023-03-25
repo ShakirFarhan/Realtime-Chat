@@ -12,7 +12,9 @@ import Loading from '../components/ui/Loading';
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 import { getChatName } from '../utils/logics';
-const ENDPOINT = "http://localhost:8000"
+import Typing from '../components/ui/Typing';
+import { validUser } from '../apis/auth';
+const ENDPOINT = process.env.REACT_APP_SERVER_URL
 let socket, selectedChatCompare;
 
 function Chat(props) {
@@ -38,16 +40,18 @@ function Chat(props) {
     }
   }
 
-  useEffect(() => {
 
+  useEffect(() => {
     socket = io(ENDPOINT)
+    socket.on("typing", () => setIsTyping(true))
+    socket.on("stop typing", () => setIsTyping(false))
+  }, [])
+
+  useEffect(() => {
     socket.emit("setup", activeUser)
     socket.on("connected", () => {
       setSocketConnected(true)
     })
-    socket.on("typing", () => setIsTyping(true))
-    socket.on("stop typing", () => setIsTyping(false))
-
   }, [messages, activeUser])
   useEffect(() => {
     const fetchMessagesFunc = async () => {
@@ -67,19 +71,27 @@ function Chat(props) {
   }, [activeChat])
   useEffect(() => {
     socket.on("message recieved", (newMessageRecieved) => {
-
       if ((!selectedChatCompare || selectedChatCompare._id) !== newMessageRecieved.chatId._id) {
         if (!notifications.includes(newMessageRecieved)) {
-
           dispatch(setNotifications([newMessageRecieved, ...notifications]))
-          dispatch(fetchChats())
         }
       }
       else {
         setMessages([...messages, newMessageRecieved])
       }
+      dispatch(fetchChats())
     })
   })
+  useEffect(() => {
+    const isValid = async () => {
+      const data = await validUser()
+      if (!data?.user) {
+        window.location.href = "/login"
+      }
+
+    }
+    isValid()
+  }, [])
   if (loading) {
     return <div className={props.className}>
       <Loading />
@@ -103,22 +115,27 @@ function Chat(props) {
             </div>
             <div className='scrollbar-hide w-[100%] h-[70vh] md:h-[66vh] lg:h-[69vh] flex flex-col overflow-y-scroll p-4'>
               <MessageHistory typing={isTyping} messages={messages} />
-            </div>
+              <div className='ml-7 -mb-10'>
+                {
+                  isTyping ?
+                    <Typing width="100" height="100" /> : ""
+                }
 
+              </div>
+            </div>
             <div className='absolute left-[31%] bottom-[8%]'>
               {
                 showPicker && <Picker data={data} onEmojiSelect={(e) => setMessage(message + e.native)} />
               }
               <div className='border-[1px] border-[#aabac8] px-6 py-3 w-[360px] sm:w-[400px] md:w-[350px] h-[50px] lg:w-[400px] rounded-t-[10px]'>
-                <form onKeyDown={(e) => keyDownFunction(e)} onSubmit={(e) => e.preventDefault()}>
 
+                <form onKeyDown={(e) => keyDownFunction(e)} onSubmit={(e) => e.preventDefault()}>
                   <input onChange={(e) => {
                     setMessage(e.target.value)
                     if (!socketConnected) return
                     if (!typing) {
                       setTyping(true)
                       socket.emit('typing', activeChat._id)
-
                     }
                     let lastTime = new Date().getTime()
                     var time = 3000

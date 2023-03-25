@@ -7,7 +7,7 @@ import { googleAuth, registerUser } from '../apis/auth'
 import { useState } from 'react'
 import { BsEmojiLaughing, BsEmojiExpressionless } from "react-icons/bs"
 import { toast } from 'react-toastify';
-
+import { validUser } from '../apis/auth'
 const defaultData = {
   firstname: "",
   lastname: "",
@@ -31,7 +31,7 @@ function Regsiter() {
         localStorage.setItem("userToken", data.token)
         toast.success("Succesfully Registered😍")
         setIsLoading(false)
-        pageRoute("/")
+        pageRoute("/chats")
 
       }
       else {
@@ -52,7 +52,7 @@ function Regsiter() {
       const response = await googleAuth({ tokenId: res.tokenId })
       if (response.data.token) {
         localStorage.setItem("userToken", response.data.token)
-        pageRoute("/")
+        pageRoute("/chats")
       }
     }
   }
@@ -68,7 +68,13 @@ function Regsiter() {
       });
     };
     gapi.load('client:auth2', initClient);
-
+    const isValid = async () => {
+      const data = await validUser()
+      if (data?.user) {
+        window.location.href = "/chats"
+      }
+    }
+    isValid()
   }, [])
   return (
     <div className='bg-[#121418] w-[100vw] h-[100vh] flex justify-center items-center'>

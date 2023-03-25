@@ -6,7 +6,7 @@ import Start from './components/Start';
 
 function App() {
   return (
-    <div className="bg-[#F9F2ED]">
+    <div className="bg-[#F8F4EA]">
       <Router>
         <Routes>
           <Route exact path="/login" element={<Login />} />

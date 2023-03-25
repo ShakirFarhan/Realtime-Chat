@@ -1,9 +1,6 @@
 import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { validUser } from '../apis/auth'
 function Start() {
-  const dispatch = useDispatch()
-  const { activeUser } = useSelector((state) => state)
   useEffect(() => {
     const isValid = async () => {
       const data = await validUser()
@@ -18,10 +15,10 @@ function Start() {
     }
     isValid()
 
-  }, [dispatch, activeUser])
+  }, [])
   return (
-    <div className='bg-[#fff]'>
-      validating
+    <div className='bg-[#fff] flex items-center justify-center w-[100vw] h-[100vh]'>
+      <lottie-player src="https://assets1.lottiefiles.com/private_files/lf30_kanwuonz.json" background="transparent" speed="1" style={{ width: "300px", height: "300px" }} loop autoplay></lottie-player>
     </div>
   )
 }

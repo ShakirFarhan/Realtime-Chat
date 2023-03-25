@@ -2,10 +2,10 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 const API = (token) =>
   axios.create({
-    baseURL: 'http://localhost:8000',
+    baseURL: process.env.REACT_APP_SERVER_URL,
     headers: { Authorization: token },
   });
-let url = 'http://localhost:8000';
+let url = process.env.REACT_APP_SERVER_URL;
 export const loginUser = async (body) => {
   try {
     return await axios.post(`${url}/auth/login`, body);
@@ -57,5 +57,13 @@ export const updateUser = async (id, body) => {
   } catch (error) {
     console.log('error in update user api');
     toast.error('Something Went Wrong.try Again!');
+  }
+};
+export const checkValid = async () => {
+  const data = await validUser();
+  if (!data?.user) {
+    window.location.href = '/login';
+  } else {
+    window.location.href = '/chats';
   }
 };

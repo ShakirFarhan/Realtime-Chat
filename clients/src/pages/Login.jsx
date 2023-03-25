@@ -8,6 +8,7 @@ import { loginUser } from '../apis/auth'
 import { Link, useNavigate } from 'react-router-dom'
 import { BsEmojiLaughing, BsEmojiExpressionless } from "react-icons/bs"
 import { toast } from 'react-toastify';
+import { validUser } from '../apis/auth'
 const defaultData = {
   email: "",
   password: ""
@@ -20,14 +21,16 @@ function Login() {
   const googleSuccess = async (res) => {
     if (res?.profileObj) {
       const response = await googleAuth({ tokenId: res.tokenId })
+      console.log("response :" + res)
       if (response.data.token) {
         localStorage.setItem("userToken", response.data.token)
-        pageRoute("/")
+        pageRoute("/chats")
 
       }
     }
   }
   const googleFailure = (error) => {
+    console.log(error)
     toast.error("Something went Wrong.Try Again!")
   }
   const handleOnChange = (e) => {
@@ -43,7 +46,7 @@ function Login() {
         localStorage.setItem("userToken", data.token)
         toast.success("Succesfully Login!")
         setIsLoading(false)
-        pageRoute("/")
+        pageRoute("/chats")
       }
       else {
         setIsLoading(false)
@@ -66,7 +69,14 @@ function Login() {
       });
     };
     gapi.load('client:auth2', initClient);
+    const isValid = async () => {
+      const data = await validUser()
+      if (data?.user) {
+        window.location.href = "/chats"
+      }
 
+    }
+    isValid()
   }, [])
   return (
     <>

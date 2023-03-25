@@ -31,7 +31,7 @@ function MessageHistory({ messages }) {
                   </Tooltip>
 
                 )}
-              <span className='tracking-wider text-[15px] font-medium'
+              <span className='tracking-wider text-[15px]  font-medium'
                 style={{
                   backgroundColor: `${m.sender._id === activeUser.id ? "#268d61" : "#f0f0f0"
                     }`,
@@ -39,7 +39,7 @@ function MessageHistory({ messages }) {
                   marginTop: isSameUser(messages, m, i, activeUser.id) ? 3 : 10,
                   borderRadius: `${m.sender._id === activeUser.id ? "10px 10px 0px 10px" : "10px 10px 10px 0"}`,
                   padding: "10px 18px",
-                  maxWidth: "75%",
+                  maxWidth: "460px",
                   color: `${m.sender._id === activeUser.id ? "#ffff" : "#848587"}`
                 }}
               >
@@ -48,6 +48,7 @@ function MessageHistory({ messages }) {
             </div>
           ))
         }
+
       </ScrollableFeed >
     </>
   )
