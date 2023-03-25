@@ -11,7 +11,7 @@ import * as Server from 'socket.io';
 
 const app = express();
 const corsConfig = {
-  origin: 'http://localhost:3000',
+  origin: process.env.BASE_URL,
   credentials: true,
 };
 
