@@ -38,7 +38,6 @@ In the first terminal
 ```
 REACT_APP_GOOGLE_CLIENT_ID = 
 REACT_APP_SERVER_URL='http://localhost:8000'
-
 ```
 
 To get your Google ClientID for authentication, go to the [credential Page ](https://console.cloud.google.com/apis/credentials) (if you are new, then [create a new project first](https://console.cloud.google.com/projectcreate) and follow the following steps;
@@ -64,7 +63,7 @@ URL=
 SECRET=
 CLIENT_ID=
 BASE_URL="http://localhost:3000"
-
+```
 ```
 $ cd server
 $ npm install (to install server-side dependencies)
