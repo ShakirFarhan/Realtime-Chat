@@ -20,7 +20,10 @@ function Login() {
   const pageRoute = useNavigate()
   const googleSuccess = async (res) => {
     if (res?.profileObj) {
+      setIsLoading(true)
       const response = await googleAuth({ tokenId: res.tokenId })
+      setIsLoading(false)
+
       console.log("response :" + res)
       if (response.data.token) {
         localStorage.setItem("userToken", response.data.token)
@@ -30,7 +33,6 @@ function Login() {
     }
   }
   const googleFailure = (error) => {
-    console.log(error)
     toast.error("Something went Wrong.Try Again!")
   }
   const handleOnChange = (e) => {

@@ -36,6 +36,8 @@ function Model(props) {
   };
   const handleClose = () => {
     setOpen(false);
+    setSearch("")
+    setSearchResults([])
   };
   const handleClick = async (e) => {
     if (members.includes(e)) {
@@ -48,12 +50,10 @@ function Model(props) {
 
   const updateBtn = async () => {
     if (name) {
-
       let data = await renameGroup({ chatId: activeChat._id, chatName: name })
       if (data) {
         dispatch(fetchChats())
         setOpen(false)
-
       }
     }
     setOpen(false)

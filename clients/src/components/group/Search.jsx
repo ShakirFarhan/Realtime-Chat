@@ -7,7 +7,7 @@ function Search({ type, isLoading, searchResults, handleClick, search }) {
     <div className={`${search ? "scrollbar-hide overflow-y-scroll h-[250px] mb-5 bg-[#fff] flex flex-col gap-y-3 pt-3" : "hidden"}`}>
 
       {
-        isLoading ? <SkeletonLoading height="35px" count={3} /> : (
+        isLoading ? <SkeletonLoading height={55} count={3} /> : (
           searchResults.length > 0 ? searchResults?.map((e) => {
             return (
               <div key={e._id} className='flex items-center justify-between'>
