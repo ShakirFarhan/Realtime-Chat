@@ -33,7 +33,7 @@ function Login() {
     }
   }
   const googleFailure = (error) => {
-    toast.error("Something went Wrong.Try Again!")
+    // toast.error("Something went Wrong.Try Again!")
   }
   const handleOnChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })

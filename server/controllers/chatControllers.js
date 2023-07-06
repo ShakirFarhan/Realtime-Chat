@@ -18,7 +18,7 @@ export const accessChats = async (req, res) => {
     select: 'name email profilePic',
   });
   if (chatExists.length > 0) {
-    res.send(chatExists[0]);
+    res.status(200).send(chatExists[0]);
   } else {
     let data = {
       chatName: 'sender',
@@ -33,7 +33,7 @@ export const accessChats = async (req, res) => {
       );
       res.status(200).json(chat);
     } catch (error) {
-      res.status(500);
+      res.status(500).send(error);
     }
   }
 };
@@ -52,7 +52,7 @@ export const fetchAllChats = async (req, res) => {
     });
     res.status(200).json(finalChats);
   } catch (error) {
-    res.status(500);
+    res.status(500).send(error);
     console.log(error);
   }
 };
@@ -92,9 +92,9 @@ export const renameGroup = async (req, res) => {
       .populate('users', '-password')
       .populate('groupAdmin', '-password');
     if (!chat) res.status(404);
-    res.send(chat);
+    res.status(200).send(chat);
   } catch (error) {
-    res.status(500);
+    res.status(500).send(error);
     console.log(error);
   }
 };

@@ -14,7 +14,7 @@ export const register = async (req, res) => {
     res.json({ message: 'success', token: token });
   } catch (error) {
     console.log('Error in register ' + error);
-    res.status(500);
+    res.status(500).send(error);
   }
 };
 export const login = async (req, res) => {
@@ -35,8 +35,7 @@ export const login = async (req, res) => {
       res.status(200).json({ token: token, status: 200 });
     }
   } catch (error) {
-    res.status(500);
-    console.log(error);
+    res.status(500).json({ error: error });
   }
 };
 export const validUser = async (req, res) => {
@@ -50,7 +49,7 @@ export const validUser = async (req, res) => {
       token: req.token,
     });
   } catch (error) {
-    res.status(500);
+    res.status(500).json({ error: error });
     console.log(error);
   }
 };
@@ -70,7 +69,7 @@ export const googleAuth = async (req, res) => {
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
       });
-      res.json({ token: tokenId, user: userExist });
+      res.status(200).json({ token: tokenId, user: userExist });
     } else {
       const password = email + process.env.CLIENT_ID;
       const newUser = await user({
@@ -84,10 +83,12 @@ export const googleAuth = async (req, res) => {
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
       });
-      res.json({ message: 'User registered Successfully', token: tokenId });
+      res
+        .status(200)
+        .json({ message: 'User registered Successfully', token: tokenId });
     }
   } catch (error) {
-    res.status(500);
+    res.status(500).json({ error: error });
     console.log('error in googleAuth backend' + error);
   }
 };
@@ -107,7 +108,7 @@ export const searchUsers = async (req, res) => {
     : {};
 
   const users = await user.find(search).find({ _id: { $ne: req.rootUserId } });
-  res.send(users);
+  res.status(200).send(users);
 };
 export const getUserById = async (req, res) => {
   const { id } = req.params;
@@ -115,7 +116,7 @@ export const getUserById = async (req, res) => {
     const selectedUser = await user.findOne({ _id: id }).select('-password');
     res.status(200).json(selectedUser);
   } catch (error) {
-    res.status(500);
+    res.status(500).json({ error: error });
   }
 };
 export const updateInfo = async (req, res) => {
