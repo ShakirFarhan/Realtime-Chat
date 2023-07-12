@@ -20,6 +20,7 @@ function Login() {
   const pageRoute = useNavigate()
   const googleSuccess = async (res) => {
     if (res?.profileObj) {
+      console.log(res.profileObj)
       setIsLoading(true)
       const response = await googleAuth({ tokenId: res.tokenId })
       setIsLoading(false)
@@ -124,6 +125,7 @@ function Login() {
               onSuccess={googleSuccess}
               onFailure={googleFailure}
               cookiePolicy={'single_host_origin'}
+              scope="profile email https://www.googleapis.com/auth/user.birthday.read"
             />
 
 
