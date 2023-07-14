@@ -1,0 +1,28 @@
+{
+  "name": "chat-website",
+  "version": "1.0.0",
+  "description": "This is a real-time chat website that allows users to connect with each other and chat in real-time. It was built using the MERN stack (MongoDB, Express.js, React.js, and Node.js), Socket.io, Redux Toolkit, and Tailwind CSS.",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/cli": "^7.22.9",
+    "@babel/core": "^7.22.9",
+    "@babel/preset-env": "^7.22.9",
+    "@babel/preset-react": "^7.22.5",
+    "babel-loader": "^9.1.3",
+    "prettier": "^3.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShakirFarhan/Realtime-Chat.git"
+  },
+  "author": "Shakir Farhan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ShakirFarhan/Realtime-Chat/issues"
+  },
+  "homepage": "https://github.com/ShakirFarhan/Realtime-Chat#readme"
+}
