@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"nodemon index.js"
   },
   "author": "",
   "license": "ISC",
@@ -21,6 +22,7 @@
     "jwt-check-expiration": "^1.0.5",
     "jwt-decode": "^3.1.2",
     "mongoose": "^6.8.2",
+    "nodemon": "^3.0.1",
     "socket.io": "^4.6.1"
   }
 }
