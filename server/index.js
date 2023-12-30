@@ -14,6 +14,7 @@ const corsConfig = {
   origin: process.env.BASE_URL,
   credentials: true,
 };
+const PORT=process.env.PORT || 8000
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -23,8 +24,8 @@ app.use('/api/chat', chatRoutes);
 app.use('/api/message', messageRoutes);
 mongoose.set('strictQuery', false);
 mongoDBConnect();
-const server = app.listen(process.env.PORT, () => {
-  console.log(`Server Listening at PORT - ${process.env.PORT}`);
+const server = app.listen(PORT, () => {
+  console.log(`Server Listening at PORT - ${PORT}`);
 });
 const io = new Server.Server(server, {
   pingTimeout: 60000,
